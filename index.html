@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人简历网站</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #647084;
+      --line: #dfe5ee;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --accent-soft: #eaf1ff;
+      --shadow: 0 14px 40px rgba(23, 32, 51, 0.08);
+      --radius: 8px;
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 86px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(223, 229, 238, 0.88);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(100% - 40px, var(--max-width));
+      min-height: 72px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: var(--radius);
+      color: #ffffff;
+      background: var(--accent);
+      font-size: 15px;
+    }
+
+    .nav-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--text);
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      margin: 4px auto;
+      background: currentColor;
+      border-radius: 999px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 13px;
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 15px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    .section {
+      padding: 88px 0;
+    }
+
+    .section-inner {
+      width: min(100% - 40px, var(--max-width));
+      margin: 0 auto;
+    }
+
+    .section-kicker {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.22;
+    }
+
+    .section-lead {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      padding: 92px 0 70px;
+      background:
+        linear-gradient(135deg, rgba(234, 241, 255, 0.92) 0%, rgba(255, 255, 255, 0.86) 48%, rgba(246, 248, 251, 0.98) 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+      align-items: center;
+      gap: 64px;
+      width: min(100% - 40px, var(--max-width));
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      margin-bottom: 22px;
+      padding: 0 12px;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: var(--radius);
+      color: var(--accent);
+      background: rgba(234, 241, 255, 0.72);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero-subtitle {
+      max-width: 620px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2.3vw, 23px);
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 20px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #ffffff;
+      background: var(--accent);
+    }
+
+    .button-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .button-secondary:hover {
+      border-color: rgba(37, 99, 235, 0.32);
+      background: var(--surface);
+    }
+
+    .profile-panel {
+      position: relative;
+      padding: 28px;
+      border: 1px solid rgba(223, 229, 238, 0.78);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .avatar {
+      display: grid;
+      width: 112px;
+      height: 112px;
+      place-items: center;
+      margin-bottom: 24px;
+      border-radius: var(--radius);
+      color: #ffffff;
+      background: linear-gradient(135deg, #172033, #2563eb);
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    .profile-panel h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .profile-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .stat {
+      padding: 16px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcff;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 23px;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 44px;
+      align-items: start;
+    }
+
+    .about-card,
+    .contact-card {
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 10px 28px rgba(23, 32, 51, 0.05);
+    }
+
+    .about-card h3,
+    .contact-card h3 {
+      margin: 0 0 12px;
+      font-size: 21px;
+    }
+
+    .about-card p,
+    .contact-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .skill {
+      padding: 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .skill:hover {
+      border-color: rgba(37, 99, 235, 0.28);
+      box-shadow: 0 10px 26px rgba(23, 32, 51, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .project-card {
+      display: flex;
+      min-height: 100%;
+      flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 10px 28px rgba(23, 32, 51, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .project-card:hover {
+      border-color: rgba(37, 99, 235, 0.3);
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+    }
+
+    .project-card h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+
+    .project-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: auto 0 22px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tech-list li {
+      padding: 5px 9px;
+      border-radius: var(--radius);
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+      max-width: 850px;
+      margin-top: 34px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 22px 24px 22px 56px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .timeline-item::before {
+      position: absolute;
+      top: 29px;
+      left: 24px;
+      width: 12px;
+      height: 12px;
+      border: 3px solid var(--accent-soft);
+      border-radius: 50%;
+      background: var(--accent);
+      content: "";
+    }
+
+    .timeline-date {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 8px;
+      font-size: 21px;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-top: 34px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .contact-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .contact-list a:hover {
+      border-color: rgba(37, 99, 235, 0.32);
+      transform: translateX(3px);
+    }
+
+    .contact-list span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer {
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: var(--surface);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .about-layout,
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .skill-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .portfolio-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      html {
+        scroll-padding-top: 72px;
+      }
+
+      .nav {
+        width: min(100% - 28px, var(--max-width));
+        min-height: 64px;
+      }
+
+      .nav-toggle {
+        display: inline-block;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 64px;
+        right: 14px;
+        left: 14px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        justify-content: center;
+      }
+
+      .section {
+        padding: 68px 0;
+      }
+
+      .section-inner,
+      .hero-grid {
+        width: min(100% - 28px, var(--max-width));
+      }
+
+      .hero {
+        padding: 66px 0 58px;
+      }
+
+      .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .profile-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .skill-grid,
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-card,
+      .contact-card,
+      .project-card,
+      .timeline-item {
+        padding: 22px;
+      }
+
+      .timeline-item {
+        padding-left: 48px;
+      }
+
+      .timeline-item::before {
+        left: 20px;
+      }
+
+      .contact-list a {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#home" aria-label="返回首页">
+        <span class="brand-mark">简</span>
+        <span>个人简历</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#home" class="active">首页</a></li>
+        <li><a href="#about">关于我</a></li>
+        <li><a href="#skills">技能</a></li>
+        <li><a href="#portfolio">作品集</a></li>
+        <li><a href="#experience">经历</a></li>
+        <li><a href="#contact">联系方式</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-grid">
+        <div>
+          <p class="hero-tag">学生作品集 / 求职简历</p>
+          <h1>李明</h1>
+          <p class="hero-subtitle">AI 应用开发学习者 / 前端开发爱好者，关注如何把清晰的界面、可靠的代码和实用的 AI 工具结合起来。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#portfolio">查看作品集</a>
+            <a class="button button-secondary" href="#contact">联系我</a>
+          </div>
+        </div>
+
+        <aside class="profile-panel" aria-label="个人概览">
+          <div class="avatar" aria-hidden="true">LM</div>
+          <h2>个人概览</h2>
+          <p>这里可以替换为你的学校、专业、求职方向或目前正在学习的技术栈。</p>
+          <div class="profile-stats">
+            <div class="stat">
+              <strong>3+</strong>
+              <span>课程项目</span>
+            </div>
+            <div class="stat">
+              <strong>7</strong>
+              <span>核心技能</span>
+            </div>
+            <div class="stat">
+              <strong>1</strong>
+              <span>作品主页</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-inner about-layout">
+        <div>
+          <p class="section-kicker">ABOUT</p>
+          <h2 class="section-title">关于我</h2>
+          <p class="section-lead">这部分文案可以替换为你的真实背景、学习方向、竞赛经历或希望申请的岗位。</p>
+        </div>
+        <div class="about-card">
+          <h3>保持学习，也重视落地</h3>
+          <p>我目前专注于前端开发、Python 编程和 AI 工具应用，喜欢把课程中学到的知识整理成可交互的小项目。希望通过持续练习，提升产品思维、工程能力和表达能力。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="section-inner">
+        <p class="section-kicker">SKILLS</p>
+        <h2 class="section-title">技能</h2>
+        <p class="section-lead">用清晰的标签展示当前能力范围，后续可以根据真实掌握程度继续增删。</p>
+        <div class="skill-grid" aria-label="技能列表">
+          <div class="skill">HTML</div>
+          <div class="skill">CSS</div>
+          <div class="skill">JavaScript</div>
+          <div class="skill">React</div>
+          <div class="skill">Python</div>
+          <div class="skill">AI Tools</div>
+          <div class="skill">Prompt Engineering</div>
+          <div class="skill">UI Design</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="portfolio">
+      <div class="section-inner">
+        <p class="section-kicker">PORTFOLIO</p>
+        <h2 class="section-title">作品集</h2>
+        <p class="section-lead">这里先放 3 个示例项目卡片，你可以把项目名称、简介和链接替换成自己的课程作品。</p>
+        <div class="portfolio-grid">
+          <article class="project-card">
+            <h3>课程任务管理器</h3>
+            <p>一个用于记录课程作业、截止日期和完成状态的网页小工具，帮助学生更清楚地安排学习任务。</p>
+            <ul class="tech-list">
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>JavaScript</li>
+            </ul>
+            <a class="button button-secondary" href="#">查看项目</a>
+          </article>
+
+          <article class="project-card">
+            <h3>AI 提示词笔记</h3>
+            <p>整理常用提示词模板，支持按学习、写作、编程等场景分类，方便复用和持续优化。</p>
+            <ul class="tech-list">
+              <li>React</li>
+              <li>AI Tools</li>
+              <li>UX</li>
+            </ul>
+            <a class="button button-secondary" href="#">查看项目</a>
+          </article>
+
+          <article class="project-card">
+            <h3>数据可视化练习</h3>
+            <p>使用图表展示学习数据、阅读记录或项目进度，练习数据清洗、图表选择和信息表达。</p>
+            <ul class="tech-list">
+              <li>Python</li>
+              <li>JavaScript</li>
+              <li>Chart</li>
+            </ul>
+            <a class="button button-secondary" href="#">查看项目</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="section-inner">
+        <p class="section-kicker">EXPERIENCE</p>
+        <h2 class="section-title">经历</h2>
+        <p class="section-lead">用时间线记录学习、项目、实习或社团经历，便于招聘者快速了解成长路径。</p>
+        <ol class="timeline">
+          <li class="timeline-item">
+            <p class="timeline-date">2026.03 - 至今</p>
+            <h3>AI 应用开发学习</h3>
+            <p>学习如何使用 AI 工具辅助需求拆解、原型设计、代码实现和文档整理。</p>
+          </li>
+          <li class="timeline-item">
+            <p class="timeline-date">2025.09 - 2026.01</p>
+            <h3>前端课程项目</h3>
+            <p>完成多个静态页面和交互练习，熟悉响应式布局、组件拆分和基础 JavaScript 逻辑。</p>
+          </li>
+          <li class="timeline-item">
+            <p class="timeline-date">2025.03 - 2025.06</p>
+            <h3>校园作品整理</h3>
+            <p>将课程作业、研究记录和设计练习整理为可展示的作品集素材。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="section-inner">
+        <p class="section-kicker">CONTACT</p>
+        <h2 class="section-title">联系方式</h2>
+        <p class="section-lead">把下面的占位链接替换为你的真实邮箱、GitHub 或个人主页即可。</p>
+        <div class="contact-layout">
+          <div class="contact-card">
+            <h3>欢迎交流</h3>
+            <p>如果你对我的课程项目、前端练习或 AI 应用方向感兴趣，可以通过右侧方式联系我。</p>
+          </div>
+          <ul class="contact-list">
+            <li><a href="mailto:yourname@example.com"><strong>yourname@example.com</strong><span>邮箱</span></a></li>
+            <li><a href="https://github.com/" target="_blank" rel="noopener"><strong>github.com/yourname</strong><span>GitHub</span></a></li>
+            <li><a href="#" target="_blank" rel="noopener"><strong>your-website.com</strong><span>个人网站</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 李明. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const navToggle = document.querySelector(".nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    const links = document.querySelectorAll(".nav-links a");
+    const sections = document.querySelectorAll("main section");
+
+    navToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      navToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    links.forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        links.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
+        });
+      });
+    }, {
+      rootMargin: "-45% 0px -45% 0px",
+      threshold: 0
+    });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>
